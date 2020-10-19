@@ -10,6 +10,8 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,6 +25,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
+  @SuppressWarnings("unused")
+  private static final Logger logger = LogManager.getLogger(AuthenticationFilter.class);
+
   private AuthenticationManager authenticationManager;
 
   public AuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -58,5 +64,13 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     String token = Jwts.builder().setClaims(claims).signWith(key, SignatureAlgorithm.HS512)
         .setExpiration(exp).compact();
     res.addHeader("token", token);
+  }
+
+  @Override
+  protected void unsuccessfulAuthentication(HttpServletRequest request,
+      HttpServletResponse response, AuthenticationException failed)
+      throws IOException, ServletException {
+    logger.info("Athentication request failed");
+    super.unsuccessfulAuthentication(request, response, failed);
   }
 }
