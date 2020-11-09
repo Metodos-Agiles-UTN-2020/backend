@@ -1,10 +1,15 @@
 package com.backend.api.models;
 
+import java.util.List;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import com.backend.api.constants.CodigoLicencia;
 
+
+@Entity
 public class TipoLicencia {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,7 +19,8 @@ public class TipoLicencia {
   private Integer edadMinima;
   private Integer edadMaxima;
   private Boolean licenciaProfesional;
-  private CodigoLicencia[] licenciasNecesarias;
+  @ElementCollection
+  private List<TipoLicencia> licenciasNecesarias;
 
   public long getId() {
     return id;
@@ -56,11 +62,11 @@ public class TipoLicencia {
     this.licenciaProfesional = licenciaProfesional;
   }
 
-  public CodigoLicencia[] getLicenciasNecesarias() {
+  public List<TipoLicencia> getLicenciasNecesarias() {
     return licenciasNecesarias;
   }
 
-  public void setLicenciasNecesarias(CodigoLicencia[] licenciasNecesarias) {
+  public void setLicenciasNecesarias(List<TipoLicencia> licenciasNecesarias) {
     this.licenciasNecesarias = licenciasNecesarias;
   }
 }

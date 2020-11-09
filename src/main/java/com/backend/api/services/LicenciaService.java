@@ -9,7 +9,7 @@ import com.backend.api.repositories.LicenciaRepository;
 @Service
 public class LicenciaService {
   @SuppressWarnings("unused")
-  private static final Logger logger = LogManager.getLogger(ApplicationUserDetailsService.class);
+  private static final Logger logger = LogManager.getLogger(LicenciaService.class);
 
   @Autowired
   private LicenciaRepository licenciaRepository;

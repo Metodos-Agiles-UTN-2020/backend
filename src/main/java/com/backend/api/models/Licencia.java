@@ -1,14 +1,17 @@
 package com.backend.api.models;
 
 import java.util.Date;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import com.backend.api.config.TipoLicenciaConverter;
 import com.backend.api.constants.EstadoLicencia;
 
 @Entity
 public class Licencia {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
@@ -18,9 +21,12 @@ public class Licencia {
   private Date fechaInicioVigencia;
   private EstadoLicencia estado;
   private Integer numeroCopia;
+
+  @Convert(converter = TipoLicenciaConverter.class)
   private TipoLicencia tipoLicencia;
 
   // private TitularLicencia titular;
+
   public long getId() {
     return id;
   }
