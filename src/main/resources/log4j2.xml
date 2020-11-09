@@ -10,8 +10,17 @@
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
         </File>
+        <File name="LoggerAdministrativo" fileName="logs/eventosAdministrativos.log">
+        	<PatternLayout>
+        		<Pattern>%d %p %m%n</Pattern>
+        	</PatternLayout>
+        </File>
     </Appenders>
     <Loggers>
+    	<Logger name="LoggerAdministrativo" level="info" additivity="false">
+    		<AppenderRef ref="LoggerAdministrativo"/>
+    		<AppenderRef ref="LogToConsole"/>
+    	</Logger>
         <Logger name="com.backend.api" level="debug" additivity="false">
             <AppenderRef ref="LogToFile"/>
             <AppenderRef ref="LogToConsole"/>
