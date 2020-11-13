@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.backend.api.models.ApplicationUser;
+import com.backend.api.repositories.TipoLicenciaRepository;
 import com.backend.api.services.ApplicationUserDetailsService;
 
 
@@ -22,6 +23,10 @@ public class ApplicationUserController {
   @Autowired
   private ApplicationUserDetailsService applicationUserDetailsService;
 
+  @Autowired
+  private TipoLicenciaRepository tipoLicenciaRepository;
+
+
   @GetMapping("/user")
   ApplicationUser getUserDetails(Principal principal) {
 
@@ -30,5 +35,4 @@ public class ApplicationUserController {
 
     return user;
   }
-
 }

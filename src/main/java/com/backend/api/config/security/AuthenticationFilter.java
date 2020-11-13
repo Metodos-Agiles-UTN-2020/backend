@@ -29,6 +29,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
   @SuppressWarnings("unused")
   private static final Logger logger = LogManager.getLogger(AuthenticationFilter.class);
 
+  private static final Logger loggerAdministrativo = LogManager.getLogger("LoggerAdministrativo");
+
   private AuthenticationManager authenticationManager;
 
   public AuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -64,6 +66,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     String token = Jwts.builder().setClaims(claims).signWith(key, SignatureAlgorithm.HS512)
         .setExpiration(exp).compact();
     res.addHeader("token", token);
+
+    loggerAdministrativo.info("[ingreso] usuario: " + ((User) auth.getPrincipal()).getUsername());
   }
 
   @Override
