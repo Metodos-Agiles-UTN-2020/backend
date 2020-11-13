@@ -23,15 +23,18 @@ public class TitularLicencia {
   private TipoDocumento tipoDocumento;
   private String nroDocumento;
   private Boolean donante;
-  /* private Base64 foto; */
+  private String foto;
 
-  /*
-   * public Base64 getFoto() { return foto; }
-   */
 
-  /*
-   * public TitularLicencia setFoto(Base64 foto) { this.foto = foto; return this; }
-   */
+  public String getFoto() {
+    return foto;
+  }
+
+  public TitularLicencia setFoto(String foto) {
+    this.foto = foto;
+    return this;
+  }
+
 
   public TitularLicencia() {
     super();
