@@ -22,7 +22,6 @@ public class ApplicationUserController {
   @Autowired
   private ApplicationUserDetailsService applicationUserDetailsService;
 
-
   @GetMapping("/user")
   ApplicationUser getUserDetails(Principal principal) {
 
