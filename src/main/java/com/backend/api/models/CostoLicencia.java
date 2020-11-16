@@ -5,7 +5,7 @@ import javax.persistence.Id;
 import com.backend.api.constants.CodigoLicencia;
 
 @Entity
-public class CostoLicencias {
+public class CostoLicencia {
 
   @Id
   private CodigoLicencia tipo;
