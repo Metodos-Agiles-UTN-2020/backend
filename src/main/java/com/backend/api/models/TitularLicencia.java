@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import com.backend.api.constants.FactorRh;
 import com.backend.api.constants.GrupoSanguineo;
 import com.backend.api.constants.TipoDocumento;
@@ -14,15 +17,29 @@ public class TitularLicencia {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
-  private String apellido;
-  private String domicilio;
-  private FactorRh factorRh;
-  private Date fechaNacimiento;
-  private GrupoSanguineo grupoSanguineo;
+  @Size(min = 1, max = 30)
+  @NotEmpty
   private String nombre;
+  @Size(min = 1, max = 30)
+  @NotEmpty
+  private String apellido;
+  @Size(min = 1, max = 255)
+  @NotEmpty
+  private String domicilio;
+  @NotNull
+  private FactorRh factorRh;
+  @NotNull
+  private Date fechaNacimiento;
+  @NotNull
+  private GrupoSanguineo grupoSanguineo;
+  @NotNull
   private TipoDocumento tipoDocumento;
+  @Size(min = 1, max = 30)
+  @NotEmpty
   private String nroDocumento;
+  @NotNull
   private Boolean donante;
+  @NotEmpty
   private String foto;
 
 
