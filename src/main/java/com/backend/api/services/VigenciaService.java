@@ -71,9 +71,6 @@ public class VigenciaService {
 
     cumpleaniosCalendar.add(Calendar.YEAR, vigencia);
 
-    System.out.println(vigencia);
-    System.out.println(edad);
-
     Date date = cumpleaniosCalendar.getTime();
 
     return date;
