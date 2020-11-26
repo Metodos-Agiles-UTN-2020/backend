@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.backend.api.exceptions.DateOutOfBoundException;
 import com.backend.api.helper.Age;
 import com.backend.api.repositories.VigenciaRepository;
 
@@ -21,7 +22,8 @@ public class VigenciaService {
   @SuppressWarnings("unused")
   private static final Logger logger = LogManager.getLogger(VigenciaService.class);
 
-  public Date getVigencia(Date fechaNacimiento, Boolean nuncaTuvoLicencia, Boolean expiro) {
+  public Date getVigencia(Date fechaNacimiento, Boolean nuncaTuvoLicencia, Boolean expiro)
+      throws Exception {
 
     Integer edad = 0;
     Integer vigencia = 0;
@@ -44,7 +46,8 @@ public class VigenciaService {
 
     cumpleaniosCalendar.set(Calendar.YEAR, todayCalendar.get(Calendar.YEAR));
 
-    if (todayCalendar.compareTo(cumpleaniosCalendar) > 0) {
+    if (todayCalendar.get(Calendar.DAY_OF_YEAR)
+        - cumpleaniosCalendar.get(Calendar.DAY_OF_YEAR) > 0) {
       cumpleaniosCalendar.set(Calendar.YEAR, todayCalendar.get(Calendar.YEAR) + 1);
     }
 
@@ -54,10 +57,10 @@ public class VigenciaService {
         .ofInstant(cumpleaniosCalendar.toInstant(), cumpleaniosCalendar.getTimeZone().toZoneId())
         .toLocalDate();
 
-    diasHastaFecha = (int) ChronoUnit.DAYS.between(localDate1, localDate2);
+    diasHastaFecha = Math.abs((int) ChronoUnit.DAYS.between(localDate1, localDate2));
 
-    if (diasHastaFecha >= diasExtra) {
-      diasHastaFecha = diasExtra;
+    if (diasHastaFecha > diasExtra) {
+      throw new DateOutOfBoundException();
     }
 
     if (nuncaTuvoLicencia) {
@@ -66,11 +69,12 @@ public class VigenciaService {
       vigencia = vigenciaRepository.tiempoVigenciaByEdad(edad);
     }
 
-    todayCalendar.add(Calendar.YEAR, vigencia);
+    cumpleaniosCalendar.add(Calendar.YEAR, vigencia);
 
-    todayCalendar.add(Calendar.DAY_OF_MONTH, 2 * diasHastaFecha);
+    System.out.println(vigencia);
+    System.out.println(edad);
 
-    Date date = todayCalendar.getTime();
+    Date date = cumpleaniosCalendar.getTime();
 
     return date;
 
