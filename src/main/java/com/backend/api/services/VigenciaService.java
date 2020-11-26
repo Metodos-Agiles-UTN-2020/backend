@@ -23,7 +23,7 @@ public class VigenciaService {
   private static final Logger logger = LogManager.getLogger(VigenciaService.class);
 
   public Date getVigencia(Date fechaNacimiento, Boolean nuncaTuvoLicencia, Boolean expiro)
-      throws Exception {
+      throws DateOutOfBoundException {
 
     Integer edad = 0;
     Integer vigencia = 0;
