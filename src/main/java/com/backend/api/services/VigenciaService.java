@@ -56,11 +56,6 @@ public class VigenciaService {
 
     diasHastaFecha = (int) ChronoUnit.DAYS.between(localDate1, localDate2);
 
-    System.out.println(localDate1);
-    System.out.println(localDate2);
-
-    System.out.println(diasHastaFecha);
-
     if (diasHastaFecha >= diasExtra) {
       diasHastaFecha = diasExtra;
     }
