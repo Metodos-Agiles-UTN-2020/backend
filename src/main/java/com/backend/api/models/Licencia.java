@@ -1,13 +1,13 @@
 package com.backend.api.models;
 
 import java.util.Date;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import com.backend.api.config.TipoLicenciaConverter;
+import javax.persistence.OneToOne;
 import com.backend.api.constants.EstadoLicencia;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Licencia {
@@ -22,10 +22,21 @@ public class Licencia {
   private EstadoLicencia estado;
   private Integer numeroCopia;
 
-  @Convert(converter = TipoLicenciaConverter.class)
+  @OneToOne
+  @JsonIgnore
   private TipoLicencia tipoLicencia;
 
-  // private TitularLicencia titular;
+  @OneToOne
+  @JsonIgnore
+  private TitularLicencia titular;
+
+  public TitularLicencia getTitular() {
+    return titular;
+  }
+
+  public void setTitular(TitularLicencia titular) {
+    this.titular = titular;
+  }
 
   public long getId() {
     return id;

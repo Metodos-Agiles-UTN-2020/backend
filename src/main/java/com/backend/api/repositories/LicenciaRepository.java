@@ -1,14 +1,18 @@
 package com.backend.api.repositories;
 
 import java.util.Date;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 import com.backend.api.models.Licencia;
+import com.backend.api.models.TipoLicencia;
+import com.backend.api.models.TitularLicencia;
 
 @Component
 public interface LicenciaRepository extends JpaRepository<Licencia, Long> {
-  @Query(value = "SELECT * FROM licencia WHERE titular_id = ?1 " + "AND tipo_licencia = 1 "
-      + "AND fecha_fin_vigencia < ?2", nativeQuery = true)
-  public Licencia getLicenciaBByTitularAndFechaFinVigencia(Long idTitular, Date today);
+
+  List<Licencia> findByTitularAndTipoLicenciaAndFechaFinVigenciaLessThan(TitularLicencia titular,
+      TipoLicencia tipoLicencia, Date today);
+
+  List<Licencia> findByTitular(TitularLicencia titular);
 }
