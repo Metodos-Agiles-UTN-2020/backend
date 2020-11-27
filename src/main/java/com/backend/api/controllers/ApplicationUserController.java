@@ -19,6 +19,9 @@ public class ApplicationUserController {
   @SuppressWarnings("unused")
   private static final Logger logger = LogManager.getLogger(ApplicationUserController.class);
 
+  @SuppressWarnings("unused")
+  private static final Logger loggerAdministrativo = LogManager.getLogger("LoggerAdministrativo");
+
   @Autowired
   private ApplicationUserDetailsService applicationUserDetailsService;
 
