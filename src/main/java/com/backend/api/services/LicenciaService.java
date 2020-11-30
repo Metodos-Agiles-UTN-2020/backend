@@ -43,7 +43,6 @@ public class LicenciaService {
       List<Licencia> tempLicencia =
           licenciaRepository.findByTitularAndTipoLicenciaAndFechaFinVigenciaLessThan(titular,
               tipoLicencia, auxToday.getTime());
-      System.out.println(1);
       if (tempLicencia.isEmpty()) {
         throw new Exception();
       }
