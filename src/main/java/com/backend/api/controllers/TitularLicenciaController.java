@@ -24,7 +24,7 @@ public class TitularLicenciaController {
   @Autowired
   private TitularLicenciaService titularLicenciaService;
 
-  @PostMapping("/alta-titular")
+  @PostMapping("/titular")
   TitularLicencia altaTitular(@Valid @RequestBody TitularLicencia titular) {
     return titularLicenciaService.saveTitular(titular);
   }
