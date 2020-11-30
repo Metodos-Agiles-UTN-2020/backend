@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.backend.api.constants.TipoDocumento;
 import com.backend.api.models.TitularLicencia;
 import com.backend.api.repositories.TitularLicenciaRepository;
 
@@ -20,11 +21,17 @@ public class TitularLicenciaService {
     return titularLicenciaRepository.save(titular);
   }
 
-  public TitularLicencia getTitularByNroDocumento(String nroDocumento) {
+  public TitularLicencia getTitularByNroDocumentoAndTipoDocumento(String nroDocumento,
+      TipoDocumento tipoDocumento) {
 
-    TitularLicencia titular = titularLicenciaRepository.findByNroDocumento(nroDocumento);
+    TitularLicencia titular =
+        titularLicenciaRepository.findByNroDocumentoAndTipoDocumento(nroDocumento, tipoDocumento);
 
     return titular;
+  }
+
+  public TitularLicencia getTitularById(Long id) {
+    return titularLicenciaRepository.getOne(id);
   }
 
 }
