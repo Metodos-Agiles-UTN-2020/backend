@@ -31,16 +31,30 @@ public class LicenciaController {
   @PostMapping("/licencia")
   AltaLicenciaResponse altaLicencia(@Valid @RequestBody AltaLicenciaRequest altaLicencia)
       throws Exception {
-    Licencia licencia = licenciaService.altaLicencia(altaLicencia.idTitular,
-        altaLicencia.codigoLicencia, altaLicencia.limitaciones, altaLicencia.observaciones);
-    AltaLicenciaResponse respuesta = new AltaLicenciaResponse(licencia);
+
+    Licencia licencia = null;
+    AltaLicenciaResponse respuesta = null;
+
+    try {
+      licencia = licenciaService.altaLicencia(altaLicencia.idTitular, altaLicencia.codigoLicencia,
+          altaLicencia.limitaciones, altaLicencia.observaciones);
+      respuesta = new AltaLicenciaResponse(licencia);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+
     Calendar auxFinVigencia = Calendar.getInstance();
     auxFinVigencia.setTime(licencia.getFechaFinVigencia());
+
     Calendar auxInicioVigencia = Calendar.getInstance();
     auxInicioVigencia.setTime(licencia.getFechaInicioVigencia());
+
     respuesta.setCosto(costoLicenciaService.getCosto(licencia.getTipoLicencia().getCodigo(),
         auxFinVigencia.get(Calendar.YEAR) - auxInicioVigencia.get(Calendar.YEAR)));
 
     return respuesta;
   }
+
+
 }

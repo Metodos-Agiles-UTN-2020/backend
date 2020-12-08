@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.backend.api.constants.CodigoLicencia;
 import com.backend.api.constants.EstadoLicencia;
+import com.backend.api.helper.Age;
 import com.backend.api.models.Licencia;
 import com.backend.api.models.TipoLicencia;
 import com.backend.api.models.TitularLicencia;
@@ -42,9 +43,17 @@ public class LicenciaService {
       auxToday.add(Calendar.YEAR, -1);
       List<Licencia> tempLicencia =
           licenciaRepository.findByTitularAndTipoLicenciaAndFechaFinVigenciaLessThan(titular,
-              tipoLicencia, auxToday.getTime());
+              tipoLicenciaRepository.findByCodigo(CodigoLicencia.B), auxToday.getTime());
+
+      if (Age.getAge(titular.getFechaNacimiento()) > tipoLicencia.getEdadMaxima()
+          || Age.getAge(titular.getFechaNacimiento()) < tipoLicencia.getEdadMinima()) {
+        throw new Exception();
+        // TODO crear excepciones personalizadas
+      }
+
       if (tempLicencia.isEmpty()) {
         throw new Exception();
+        // TODO crear excepciones personalizadas
       }
 
     }
@@ -57,10 +66,8 @@ public class LicenciaService {
     else
       tuvoLicencia = true;
 
-
-
     Licencia licencia = new Licencia();
-    licencia.setEstado(EstadoLicencia.NOVIGENTE);
+    licencia.setEstado(EstadoLicencia.VIGENTE);
     licencia.setFechaFinVigencia(
         vigenciaService.getVigencia(titular.getFechaNacimiento(), tuvoLicencia, false));
     licencia.setFechaInicioVigencia(auxToday.getTime());

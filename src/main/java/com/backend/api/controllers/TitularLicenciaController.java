@@ -25,7 +25,8 @@ public class TitularLicenciaController {
   private TitularLicenciaService titularLicenciaService;
 
   @PostMapping("/titular")
-  TitularLicencia altaTitular(@Valid @RequestBody TitularLicencia titular) {
+  TitularLicencia altaTitular(@Valid @RequestBody TitularLicencia titular) throws Exception {
+
     return titularLicenciaService.saveTitular(titular);
   }
 
