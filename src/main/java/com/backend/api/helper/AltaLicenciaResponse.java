@@ -1,7 +1,8 @@
-package com.backend.api.models;
+package com.backend.api.helper;
 
 import java.util.Date;
 import com.backend.api.constants.EstadoLicencia;
+import com.backend.api.models.Licencia;
 
 public class AltaLicenciaResponse {
   private long id;

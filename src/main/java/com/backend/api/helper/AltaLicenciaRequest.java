@@ -1,4 +1,4 @@
-package com.backend.api.models;
+package com.backend.api.helper;
 
 import javax.validation.constraints.NotNull;
 import com.backend.api.constants.CodigoLicencia;

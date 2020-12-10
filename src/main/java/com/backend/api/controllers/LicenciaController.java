@@ -1,16 +1,27 @@
 package com.backend.api.controllers;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import javax.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.backend.api.models.AltaLicenciaRequest;
-import com.backend.api.models.AltaLicenciaResponse;
+import com.backend.api.constants.EstadoLicencia;
+import com.backend.api.constants.FactorRh;
+import com.backend.api.constants.GrupoSanguineo;
+import com.backend.api.helper.AltaLicenciaRequest;
+import com.backend.api.helper.AltaLicenciaResponse;
+import com.backend.api.helper.LicenciaResponse;
+import com.backend.api.helper.PageResponse;
 import com.backend.api.models.Licencia;
 import com.backend.api.services.CostoLicenciaService;
 import com.backend.api.services.LicenciaService;
@@ -36,6 +47,7 @@ public class LicenciaController {
         altaLicencia.codigoLicencia, altaLicencia.limitaciones, altaLicencia.observaciones);
     AltaLicenciaResponse respuesta = new AltaLicenciaResponse(licencia);
 
+
     Calendar auxFinVigencia = Calendar.getInstance();
     auxFinVigencia.setTime(licencia.getFechaFinVigencia());
 
@@ -48,5 +60,61 @@ public class LicenciaController {
     return respuesta;
   }
 
+
+  @GetMapping("/licencias")
+  PageResponse<LicenciaResponse, Licencia> getLicencias(
+      @RequestParam(name = "nombre", required = false) String nombre,
+      @RequestParam(name = "apellido", required = false) String apellido,
+      @RequestParam(name = "grupoSanguineo", required = false) GrupoSanguineo grupoSanguineo,
+      @RequestParam(name = "factorRH", required = false) FactorRh factorRH,
+      @RequestParam(name = "donante", required = false) Boolean donante,
+      @RequestParam(name = "expirada", required = false) Boolean expirada,
+      @RequestParam(name = "pagina", required = false) Integer pagina,
+      @RequestParam(name = "resultados", required = false) Integer resultados) {
+
+    if (pagina == null) {
+      pagina = 0;
+    }
+
+    if (resultados == null) {
+      resultados = 10;
+    }
+
+    Pageable paginacion = PageRequest.of(pagina, resultados);
+
+    Integer grupoSanguineoToInteger = null;
+    Integer factorRHToInteger = null;
+
+
+    if (grupoSanguineo != null) {
+      grupoSanguineoToInteger = grupoSanguineo.ordinal();
+    }
+
+    if (factorRH != null) {
+      factorRHToInteger = factorRH.ordinal();
+    }
+
+    ArrayList<LicenciaResponse> licenciaResponse = new ArrayList<LicenciaResponse>();
+    Page<Licencia> paginaLicencias = null;
+
+    Calendar today = Calendar.getInstance();
+
+    if (expirada == Boolean.TRUE) {
+      paginaLicencias = licenciaService.getLicenciasExpiradas(EstadoLicencia.NOVIGENTE,
+          today.getTime(), paginacion);
+    } else {
+      paginaLicencias = licenciaService.getLicencias(nombre, apellido, grupoSanguineoToInteger,
+          factorRHToInteger, donante, paginacion);
+    }
+
+    for (Licencia l : paginaLicencias) {
+      licenciaResponse.add(new LicenciaResponse(l));
+    }
+
+    PageResponse<LicenciaResponse, Licencia> pageResponse =
+        new PageResponse<LicenciaResponse, Licencia>(licenciaResponse, paginaLicencias, pagina);
+
+    return pageResponse;
+  }
 
 }
