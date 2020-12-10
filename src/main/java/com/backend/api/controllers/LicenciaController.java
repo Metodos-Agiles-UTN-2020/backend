@@ -43,13 +43,10 @@ public class LicenciaController {
   AltaLicenciaResponse altaLicencia(@Valid @RequestBody AltaLicenciaRequest altaLicencia)
       throws Exception {
 
-    Licencia licencia = null;
-    AltaLicenciaResponse respuesta = null;
+    Licencia licencia = licenciaService.altaLicencia(altaLicencia.idTitular,
+        altaLicencia.codigoLicencia, altaLicencia.limitaciones, altaLicencia.observaciones);
+    AltaLicenciaResponse respuesta = new AltaLicenciaResponse(licencia);
 
-
-    licencia = licenciaService.altaLicencia(altaLicencia.idTitular, altaLicencia.codigoLicencia,
-        altaLicencia.limitaciones, altaLicencia.observaciones);
-    respuesta = new AltaLicenciaResponse(licencia);
 
     Calendar auxFinVigencia = Calendar.getInstance();
     auxFinVigencia.setTime(licencia.getFechaFinVigencia());
