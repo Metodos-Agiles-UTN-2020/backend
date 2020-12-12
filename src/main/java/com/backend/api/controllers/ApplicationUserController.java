@@ -54,6 +54,7 @@ public class ApplicationUserController {
       throws Exception {
     String token = request.getHeader(AUTH_HEADER_NAME);
 
+    @SuppressWarnings("deprecation")
     String username = Jwts.parser().setSigningKey(Keys.hmacShaKeyFor(KEY.getBytes()))
         .parseClaimsJws(token).getBody().get("sub").toString();
 
@@ -64,11 +65,7 @@ public class ApplicationUserController {
       // TODO throw forbidden
     }
 
-    try {
-      applicationUserDetailsService.updateUser(updateUser);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    applicationUserDetailsService.updateUser(updateUser);
 
     return updateUser;
   }
