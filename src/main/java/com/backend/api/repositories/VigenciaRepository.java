@@ -3,7 +3,7 @@ package com.backend.api.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
-import com.backend.api.config.IdVigencia;
+import com.backend.api.helper.IdVigencia;
 import com.backend.api.models.Vigencia;
 
 @Component

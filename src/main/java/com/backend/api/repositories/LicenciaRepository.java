@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import com.backend.api.constants.EstadoLicencia;
 import com.backend.api.models.Licencia;
 import com.backend.api.models.TipoLicencia;
@@ -38,6 +40,12 @@ public interface LicenciaRepository
 
   Page<Licencia> findByEstadoAndFechaFinVigenciaLessThanOrderByFechaFinVigenciaDesc(
       EstadoLicencia estadoLicencia, Date today, Pageable pageable);
+
+
+  @Modifying
+  @Transactional
+  @Query(value = "UPDATE licencia SET numero_copia = ?2 WHERE id = ?1", nativeQuery = true)
+  void copiaLicencia(Long id, Integer nroCopia);
 
 }
 

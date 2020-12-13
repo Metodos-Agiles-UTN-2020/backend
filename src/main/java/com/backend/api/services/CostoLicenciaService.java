@@ -26,4 +26,11 @@ public class CostoLicenciaService {
     }
     return null;
   }
+
+  public Integer getCostoCopia(CodigoLicencia codigo) {
+    CostoLicencia costoLicencia = costoLicenciaRepository.getOne(codigo);
+
+    return costoLicencia.getCostoCopia();
+  }
+
 }
