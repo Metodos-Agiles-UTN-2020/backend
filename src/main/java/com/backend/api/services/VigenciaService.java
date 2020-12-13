@@ -22,7 +22,7 @@ public class VigenciaService {
   @SuppressWarnings("unused")
   private static final Logger logger = LogManager.getLogger(VigenciaService.class);
 
-  public Date getVigencia(Date fechaNacimiento, Boolean nuncaTuvoLicencia, Boolean expiro)
+  public Date getVigencia(Date fechaNacimiento, Boolean nuncaTuvoLicencia)
       throws DateOutOfBoundException {
 
     Integer edad = 0;
@@ -30,7 +30,7 @@ public class VigenciaService {
     Integer diasExtra = 0;
     Integer diasHastaFecha = 0;
 
-    diasExtra = expiro ? 30 : 45;
+    diasExtra = 45;
 
     Calendar nacimientoACalendar = Calendar.getInstance();
 
@@ -75,5 +75,59 @@ public class VigenciaService {
 
     return date;
 
+  }
+
+  public Date getVigenciaExpirada(Date fechaNacimiento, Date fechaFinVigencia)
+      throws DateOutOfBoundException {
+    Integer edad = 0;
+    Integer vigencia = 0;
+    Integer diasExtra = 0;
+    Integer diasHastaFecha = 0;
+
+    diasExtra = 30;
+
+    Calendar nacimientoACalendar = Calendar.getInstance();
+
+    nacimientoACalendar.setTime(fechaNacimiento);
+
+    edad = Age.getAge(fechaNacimiento);
+
+    Calendar todayCalendar = Calendar.getInstance();
+
+    Calendar cumpleaniosCalendar = Calendar.getInstance();
+
+    Calendar finVigenciaCalendar = Calendar.getInstance();
+
+    finVigenciaCalendar.setTime(fechaFinVigencia);
+
+    cumpleaniosCalendar.setTime(fechaNacimiento);
+
+    cumpleaniosCalendar.set(Calendar.YEAR, todayCalendar.get(Calendar.YEAR));
+
+    if (todayCalendar.get(Calendar.DAY_OF_YEAR)
+        - cumpleaniosCalendar.get(Calendar.DAY_OF_YEAR) > 0) {
+      cumpleaniosCalendar.set(Calendar.YEAR, todayCalendar.get(Calendar.YEAR) + 1);
+    }
+
+    LocalDate localDate1 = LocalDateTime
+        .ofInstant(todayCalendar.toInstant(), todayCalendar.getTimeZone().toZoneId()).toLocalDate();
+
+    LocalDate localDate3 = LocalDateTime
+        .ofInstant(finVigenciaCalendar.toInstant(), finVigenciaCalendar.getTimeZone().toZoneId())
+        .toLocalDate();
+
+    diasHastaFecha = (int) ChronoUnit.DAYS.between(localDate1, localDate3);
+
+    if (diasHastaFecha > diasExtra || diasHastaFecha < 0) {
+      throw new DateOutOfBoundException();
+    }
+
+    vigencia = vigenciaRepository.tiempoVigenciaByEdad(edad);
+
+    cumpleaniosCalendar.add(Calendar.YEAR, vigencia);
+
+    Date date = cumpleaniosCalendar.getTime();
+
+    return date;
   }
 }

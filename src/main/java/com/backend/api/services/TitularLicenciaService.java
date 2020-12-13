@@ -1,5 +1,6 @@
 package com.backend.api.services;
 
+import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,13 @@ public class TitularLicenciaService {
     if (Age.getAge(titular.getFechaNacimiento()) < 18) {
       throw new AgeOutOfBoundsException();
     }
+
+    String[] foto = titular.getFoto().split(Pattern.quote(","));
+
+    if (foto.length == 2) {
+      titular.setFoto(foto[1]);
+    }
+
     return titularLicenciaRepository.save(titular);
   }
 

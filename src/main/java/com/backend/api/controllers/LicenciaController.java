@@ -1,7 +1,5 @@
 package com.backend.api.controllers;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import javax.validation.Valid;
@@ -15,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,8 +22,8 @@ import com.backend.api.constants.FactorRh;
 import com.backend.api.constants.GrupoSanguineo;
 import com.backend.api.helper.AltaLicenciaRequest;
 import com.backend.api.helper.AltaLicenciaResponse;
+import com.backend.api.helper.AltaLicenciaResponseBuilder;
 import com.backend.api.helper.LicenciaResponse;
-import com.backend.api.helper.LicenseEncoder;
 import com.backend.api.helper.PageResponse;
 import com.backend.api.models.Licencia;
 import com.backend.api.services.CostoLicenciaService;
@@ -50,28 +49,7 @@ public class LicenciaController {
     Licencia licencia = licenciaService.altaLicencia(altaLicencia.idTitular,
         altaLicencia.codigoLicencia, altaLicencia.limitaciones, altaLicencia.observaciones);
 
-    DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-    String fechafinVigencia = formatter.format(licencia.getFechaFinVigencia());
-    String fechaInicioVigencia = formatter.format(licencia.getFechaInicioVigencia());
-    String fechaNacimiento = formatter.format(licencia.getTitular().getFechaNacimiento());
-
-    String licenciaFrente = LicenseEncoder.encodeFront(licencia.getTitular().getNroDocumento(),
-        licencia.getTitular().getApellido(), licencia.getTitular().getNombre(),
-        licencia.getTitular().getDomicilio(), fechaNacimiento, fechaInicioVigencia,
-        licencia.getTipoLicencia().getCodigo().toString(), fechafinVigencia,
-        licencia.getTitular().getFoto());
-
-
-    String donante = licencia.getTitular().getDonante() ? "SI" : "NO";
-    String factor = licencia.getTitular().getFactorRh().toString() == "POSITIVO" ? "+" : "-";
-
-    String licenciaAtras = LicenseEncoder.encodeBack(licencia.getObservaciones(), donante,
-        licencia.getTitular().getGrupoSanguineo().toString() + factor, licencia.getLimitaciones());
-
-
-    AltaLicenciaResponse respuesta =
-        new AltaLicenciaResponse(licencia, licenciaFrente, licenciaAtras);
-
+    AltaLicenciaResponse respuesta = AltaLicenciaResponseBuilder.build(licencia);
 
     Calendar auxFinVigencia = Calendar.getInstance();
     auxFinVigencia.setTime(licencia.getFechaFinVigencia());
@@ -84,7 +62,6 @@ public class LicenciaController {
 
     return respuesta;
   }
-
 
   @GetMapping("/licencias")
   PageResponse<LicenciaResponse, Licencia> getLicencias(
@@ -150,33 +127,44 @@ public class LicenciaController {
     licenciaService.getCopia(id, nroCopia);
     licencia.setNumeroCopia(nroCopia);
 
-
-    DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-    String fechafinVigencia = formatter.format(licencia.getFechaFinVigencia());
-    String fechaInicioVigencia = formatter.format(licencia.getFechaInicioVigencia());
-    String fechaNacimiento = formatter.format(licencia.getTitular().getFechaNacimiento());
-
-    String licenciaFrente = LicenseEncoder.encodeFront(licencia.getTitular().getNroDocumento(),
-        licencia.getTitular().getApellido(), licencia.getTitular().getNombre(),
-        licencia.getTitular().getDomicilio(), fechaNacimiento, fechaInicioVigencia,
-        licencia.getTipoLicencia().getCodigo().toString(), fechafinVigencia,
-        licencia.getTitular().getFoto());
-
-
-    String donante = licencia.getTitular().getDonante() ? "SI" : "NO";
-    String factor = licencia.getTitular().getFactorRh().toString() == "POSITIVO" ? "+" : "-";
-
-    String licenciaAtras = LicenseEncoder.encodeBack(licencia.getObservaciones(), donante,
-        licencia.getTitular().getGrupoSanguineo().toString() + factor, licencia.getLimitaciones());
-
-
-    AltaLicenciaResponse respuesta =
-        new AltaLicenciaResponse(licencia, licenciaFrente, licenciaAtras);
+    AltaLicenciaResponse respuesta = AltaLicenciaResponseBuilder.build(licencia);
 
     respuesta.setCosto(costoLicenciaService.getCostoCopia(licencia.getTipoLicencia().getCodigo()));
 
     return respuesta;
 
+  }
+
+  @PutMapping("/licencia")
+  AltaLicenciaResponse renovarLicencia(
+      @RequestParam(name = "modificada", required = false) Boolean modificada,
+      @RequestParam(name = "expirada", required = false) Boolean expirada,
+      @RequestBody Licencia licencia) throws Exception {
+
+    if (modificada == null)
+      modificada = false;
+    if (expirada == null)
+      expirada = false;
+
+
+    if (licencia.getId() == 0) {
+      throw new Exception();
+    }
+
+    licencia = licenciaService.modificarLicencia(modificada, expirada, licencia);
+
+    AltaLicenciaResponse respuesta = AltaLicenciaResponseBuilder.build(licencia);
+
+    Calendar auxFinVigencia = Calendar.getInstance();
+    auxFinVigencia.setTime(licencia.getFechaFinVigencia());
+
+    Calendar auxInicioVigencia = Calendar.getInstance();
+    auxInicioVigencia.setTime(licencia.getFechaInicioVigencia());
+
+    respuesta.setCosto(costoLicenciaService.getCosto(licencia.getTipoLicencia().getCodigo(),
+        auxFinVigencia.get(Calendar.YEAR) - auxInicioVigencia.get(Calendar.YEAR)));
+
+    return respuesta;
   }
 
 }
