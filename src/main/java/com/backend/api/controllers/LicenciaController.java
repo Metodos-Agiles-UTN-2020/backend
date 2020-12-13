@@ -25,6 +25,7 @@ import com.backend.api.helper.AltaLicenciaResponse;
 import com.backend.api.helper.AltaLicenciaResponseBuilder;
 import com.backend.api.helper.LicenciaResponse;
 import com.backend.api.helper.PageResponse;
+import com.backend.api.helper.TicketEncoder;
 import com.backend.api.models.Licencia;
 import com.backend.api.services.CostoLicenciaService;
 import com.backend.api.services.LicenciaService;
@@ -59,6 +60,12 @@ public class LicenciaController {
 
     respuesta.setCosto(costoLicenciaService.getCosto(licencia.getTipoLicencia().getCodigo(),
         auxFinVigencia.get(Calendar.YEAR) - auxInicioVigencia.get(Calendar.YEAR)));
+
+
+    respuesta.setTicket(
+        TicketEncoder.encode("Licencia tipo " + licencia.getTipoLicencia().getCodigo().toString(),
+            "$" + respuesta.getCosto().toString(), "1", "", "", "", "", "", "",
+            "$" + respuesta.getCosto().toString()));
 
     return respuesta;
   }
@@ -123,16 +130,22 @@ public class LicenciaController {
   AltaLicenciaResponse getCopia(@PathVariable(value = "id") Long id) {
 
     Licencia licencia = licenciaService.getById(id);
+
     Integer nroCopia = licencia.getNumeroCopia() + 1;
+
     licenciaService.getCopia(id, nroCopia);
+
     licencia.setNumeroCopia(nroCopia);
 
     AltaLicenciaResponse respuesta = AltaLicenciaResponseBuilder.build(licencia);
 
     respuesta.setCosto(costoLicenciaService.getCostoCopia(licencia.getTipoLicencia().getCodigo()));
 
-    return respuesta;
+    respuesta.setTicket(
+        TicketEncoder.encode("Licencia tipo " + licencia.getTipoLicencia().getCodigo().toString(),
+            "$" + respuesta.getCosto(), "1", "", "", "", "", "", "", "$" + respuesta.getCosto()));
 
+    return respuesta;
   }
 
   @PutMapping("/licencia")
@@ -163,6 +176,10 @@ public class LicenciaController {
 
     respuesta.setCosto(costoLicenciaService.getCosto(licencia.getTipoLicencia().getCodigo(),
         auxFinVigencia.get(Calendar.YEAR) - auxInicioVigencia.get(Calendar.YEAR)));
+
+    respuesta.setTicket(
+        TicketEncoder.encode("Licencia tipo " + licencia.getTipoLicencia().getCodigo().toString(),
+            "$" + respuesta.getCosto(), "1", "", "", "", "", "", "", "$" + respuesta.getCosto()));
 
     return respuesta;
   }

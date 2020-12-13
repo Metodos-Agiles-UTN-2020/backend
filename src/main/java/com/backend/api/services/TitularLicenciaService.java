@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.backend.api.constants.TipoDocumento;
 import com.backend.api.exceptions.AgeOutOfBoundsException;
+import com.backend.api.exceptions.NotFoundException;
 import com.backend.api.helper.Age;
 import com.backend.api.models.TitularLicencia;
 import com.backend.api.repositories.TitularLicenciaRepository;
@@ -40,6 +41,10 @@ public class TitularLicenciaService {
 
     TitularLicencia titular =
         titularLicenciaRepository.findByNroDocumentoAndTipoDocumento(nroDocumento, tipoDocumento);
+
+    if (titular == null) {
+      throw new NotFoundException();
+    }
 
     return titular;
   }

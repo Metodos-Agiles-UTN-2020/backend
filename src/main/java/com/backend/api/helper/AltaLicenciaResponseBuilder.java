@@ -26,7 +26,6 @@ public class AltaLicenciaResponseBuilder {
     String licenciaAtras = LicenseEncoder.encodeBack(licencia.getObservaciones(), donante,
         licencia.getTitular().getGrupoSanguineo().toString() + factor, licencia.getLimitaciones());
 
-
     AltaLicenciaResponse respuesta =
         new AltaLicenciaResponse(licencia, licenciaFrente, licenciaAtras);
 
