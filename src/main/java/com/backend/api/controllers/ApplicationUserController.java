@@ -3,17 +3,19 @@ package com.backend.api.controllers;
 
 import static com.backend.api.constants.SecurityConstants.AUTH_HEADER_NAME;
 import static com.backend.api.constants.SecurityConstants.KEY;
+import java.security.Principal;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.backend.api.constants.TipoUsuario;
+import com.backend.api.exceptions.ForbiddenException;
 import com.backend.api.models.ApplicationUser;
 import com.backend.api.services.ApplicationUserDetailsService;
 import io.jsonwebtoken.Jwts;
@@ -33,18 +35,18 @@ public class ApplicationUserController {
   @Autowired
   private ApplicationUserDetailsService applicationUserDetailsService;
 
-  /*
-   * @GetMapping("/user") ApplicationUser getUserDetails(Principal principal) {
-   * 
-   * String username = principal.getName(); ApplicationUser user =
-   * applicationUserDetailsService.getUserDetails(username);
-   * 
-   * return user; }
-   */
 
   @GetMapping("/user")
-  ApplicationUser getUserByDni(
-      @RequestParam(name = "nroDocumento", required = true) String nroDocumento) {
+  ApplicationUser getUserDetails(Principal principal) {
+
+    String username = principal.getName();
+    ApplicationUser user = applicationUserDetailsService.getUserDetails(username);
+
+    return user;
+  }
+
+  @GetMapping("/user/{nroDocumento}")
+  ApplicationUser getUserByDni(@PathVariable(value = "nroDocumento") String nroDocumento) {
     ApplicationUser user = applicationUserDetailsService.getUserByDNI(nroDocumento);
     return user;
   }
@@ -61,8 +63,7 @@ public class ApplicationUserController {
     ApplicationUser user = applicationUserDetailsService.getUserDetails(username);
 
     if (user.getTipoUsuario() != TipoUsuario.SUPERUSUARIO) {
-      throw new Exception();
-      // TODO throw forbidden
+      throw new ForbiddenException();
     }
 
     applicationUserDetailsService.updateUser(updateUser);

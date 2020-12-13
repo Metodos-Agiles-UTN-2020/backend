@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.backend.api.constants.CodigoLicencia;
 import com.backend.api.constants.EstadoLicencia;
+import com.backend.api.exceptions.AgeOutOfBoundsException;
+import com.backend.api.exceptions.MissingRequirementsException;
 import com.backend.api.helper.Age;
 import com.backend.api.models.Licencia;
 import com.backend.api.models.TipoLicencia;
@@ -49,13 +51,11 @@ public class LicenciaService {
 
       if (Age.getAge(titular.getFechaNacimiento()) > tipoLicencia.getEdadMaxima()
           || Age.getAge(titular.getFechaNacimiento()) < tipoLicencia.getEdadMinima()) {
-        throw new Exception();
-        // TODO crear excepciones personalizadas
+        throw new AgeOutOfBoundsException();
       }
 
       if (tempLicencia.isEmpty()) {
-        throw new Exception();
-        // TODO crear excepciones personalizadas
+        throw new MissingRequirementsException();
       }
 
     }
