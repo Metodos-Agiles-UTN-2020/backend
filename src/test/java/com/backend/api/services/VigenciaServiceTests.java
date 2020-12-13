@@ -38,8 +38,7 @@ public class VigenciaServiceTests {
 
     String vencimiento = null;
     try {
-      vencimiento =
-          formatter.format(vigenciaService.getVigencia(fechaNacimiento.getTime(), true, false));
+      vencimiento = formatter.format(vigenciaService.getVigencia(fechaNacimiento.getTime(), true));
     } catch (Exception e) {
       Calendar aux = Calendar.getInstance();
       vencimiento = formatter.format(aux.getTime());
@@ -65,7 +64,7 @@ public class VigenciaServiceTests {
     String vencimiento_test = formatter.format(fechaVencimiento.getTime());
 
     try {
-      vigenciaService.getVigencia(fechaNacimiento.getTime(), true, false);
+      vigenciaService.getVigencia(fechaNacimiento.getTime(), true);
     } catch (DateOutOfBoundException e) {
       assertEquals(1, 1);
     }
