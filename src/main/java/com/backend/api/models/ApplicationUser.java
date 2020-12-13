@@ -14,6 +14,7 @@ public class ApplicationUser {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
   private String username;
+  @JsonIgnore
   private String password;
 
   private String nombre;

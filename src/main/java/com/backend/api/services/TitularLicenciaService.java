@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.backend.api.constants.TipoDocumento;
+import com.backend.api.exceptions.AgeOutOfBoundsException;
 import com.backend.api.helper.Age;
 import com.backend.api.models.TitularLicencia;
 import com.backend.api.repositories.TitularLicenciaRepository;
@@ -21,8 +22,7 @@ public class TitularLicenciaService {
   public TitularLicencia saveTitular(TitularLicencia titular) throws Exception {
 
     if (Age.getAge(titular.getFechaNacimiento()) < 18) {
-      throw new Exception();
-      // TODO agregar excepcion personalizada
+      throw new AgeOutOfBoundsException();
     }
     return titularLicenciaRepository.save(titular);
   }

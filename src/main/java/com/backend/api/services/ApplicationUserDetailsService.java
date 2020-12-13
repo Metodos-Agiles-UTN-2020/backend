@@ -35,4 +35,16 @@ public class ApplicationUserDetailsService implements UserDetailsService {
     return applicationUserRepository.findByUsername(username);
   }
 
+  public ApplicationUser getUserByDNI(String nroDocumento) {
+    return applicationUserRepository.findByDni(nroDocumento);
+  }
+
+  public void updateUser(ApplicationUser updateUser) {
+
+    applicationUserRepository.updateUser(updateUser.getId(), updateUser.getUsername(),
+        updateUser.getNombre(), updateUser.getApellido(), updateUser.getDni(),
+        updateUser.getMail());
+
+  }
+
 }
