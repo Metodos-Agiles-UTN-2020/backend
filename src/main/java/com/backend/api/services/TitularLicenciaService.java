@@ -53,4 +53,11 @@ public class TitularLicenciaService {
     return titularLicenciaRepository.getOne(id);
   }
 
+  public void updateTitular(TitularLicencia titular) {
+    titularLicenciaRepository.updateTitular(titular.getTipoDocumento().ordinal(),
+        titular.getNroDocumento(), titular.getNombre(), titular.getApellido(),
+        titular.getFechaNacimiento(), titular.getDomicilio(), titular.getGrupoSanguineo().ordinal(),
+        titular.getFactorRh().ordinal(), titular.getDonante(), titular.getFoto(), titular.getId());
+  }
+
 }
