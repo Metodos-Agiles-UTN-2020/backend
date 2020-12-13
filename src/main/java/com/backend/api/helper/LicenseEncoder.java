@@ -40,7 +40,6 @@ public class LicenseEncoder {
       licence.setFont(new Font(FONT, Font.BOLD, 50));
       licence.setColor(Color.BLACK);
 
-      // Guardo la foto de perfil desde Base64 a png
       BufferedImage image = null;
       byte[] imageByte;
       try {
@@ -50,9 +49,7 @@ public class LicenseEncoder {
         ImageIO.write(image, "png", new File(PROFILE));
         bis.close();
       } catch (Exception e) {
-        e.printStackTrace();
       }
-      // levanto la imagen en png
       BufferedImage prof = ImageIO.read(new File(PROFILE));
 
       // DNI
@@ -75,13 +72,10 @@ public class LicenseEncoder {
       licence.drawImage(prof, 64, 270, null);
 
 
-      // Guarda la imagen en el directorio
       ImageIO.write(back, "png", new File(OUTPUT_FRONT));
-      // Levanta la imagen y la convierte en base64
       String base64Image = "";
       File file = new File(OUTPUT_FRONT);
       try (FileInputStream imageInFile = new FileInputStream(file)) {
-        // Reading a Image file from file system
         byte imageData[] = new byte[(int) file.length()];
         imageInFile.read(imageData);
         base64Image = Base64.getEncoder().encodeToString(imageData);
@@ -91,7 +85,6 @@ public class LicenseEncoder {
       }
 
     } catch (IOException e) {
-      e.printStackTrace();
     }
     return null;
   }
@@ -131,9 +124,7 @@ public class LicenseEncoder {
       }
 
 
-      // Guarda la imagen en el directorio
       ImageIO.write(back, "png", new File(OUTPUT_BACK));
-      // Levanta la imagen y la convierte en base64
       String base64Image = "";
       File file = new File(OUTPUT_BACK);
       try (FileInputStream imageInFile = new FileInputStream(file)) {
@@ -145,7 +136,6 @@ public class LicenseEncoder {
       }
 
     } catch (IOException e) {
-      e.printStackTrace();
     }
     return null;
   }
