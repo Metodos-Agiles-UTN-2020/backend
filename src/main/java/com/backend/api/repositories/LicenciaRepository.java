@@ -47,6 +47,29 @@ public interface LicenciaRepository
   @Query(value = "UPDATE licencia SET numero_copia = ?2 WHERE id = ?1", nativeQuery = true)
   void copiaLicencia(Long id, Integer nroCopia);
 
+
+  @Modifying
+  @Transactional
+  @Query(value = "UPDATE licencia SET observaciones = ?2, limitaciones = ?3 WHERE id = ?1",
+      nativeQuery = true)
+  void licenciaModificada(Long id, String observaciones, String limitaciones);
+
+  @Modifying
+  @Transactional
+  @Query(
+      value = "UPDATE licencia SET fecha_inicio_vigencia = ?2, fecha_fin_vigencia = ?3 WHERE id = ?1",
+      nativeQuery = true)
+  void licenciaExpirada(Long id, Date fechaInicioVigencia, Date fechaFinVigencia);
+
+  @Modifying
+  @Transactional
+  @Query(
+      value = "UPDATE licencia SET fecha_inicio_vigencia = ?2, fecha_fin_vigencia = ?3, observaciones = ?4, limitaciones = ?5 WHERE id = ?1",
+      nativeQuery = true)
+  void licenciaExpiradaYModificada(Long id, Date fechaInicioVigencia, Date fechaFinVigencia,
+      String observaciones, String limitaciones);
+
+
 }
 
 

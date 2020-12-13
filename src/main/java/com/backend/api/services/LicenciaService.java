@@ -77,7 +77,7 @@ public class LicenciaService {
     Licencia licencia = new Licencia();
     licencia.setEstado(EstadoLicencia.VIGENTE);
     licencia.setFechaFinVigencia(
-        vigenciaService.getVigencia(titular.getFechaNacimiento(), tuvoLicencia, false));
+        vigenciaService.getVigencia(titular.getFechaNacimiento(), tuvoLicencia));
     licencia.setFechaInicioVigencia(auxToday.getTime());
     licencia.setLimitaciones(limitaciones);
     licencia.setNumeroCopia(0);
@@ -114,5 +114,42 @@ public class LicenciaService {
 
   public void getCopia(Long id, Integer nroCopia) {
     licenciaRepository.copiaLicencia(id, nroCopia);
+  }
+
+  public Licencia modificarLicencia(Boolean modificada, Boolean expirada, Licencia licencia)
+      throws Exception {
+
+    Licencia licenciaOriginal = this.getById(licencia.getId());
+
+    Calendar today = Calendar.getInstance();
+    Date nuevaVigencia = null;
+
+    if (modificada && expirada) {
+      nuevaVigencia =
+          vigenciaService.getVigenciaExpirada(licenciaOriginal.getTitular().getFechaNacimiento(),
+              licenciaOriginal.getFechaFinVigencia());
+      licenciaRepository.licenciaExpiradaYModificada(licenciaOriginal.getId(), today.getTime(),
+          nuevaVigencia, licencia.getObservaciones(), licencia.getLimitaciones());
+
+      licenciaOriginal.setObservaciones(licencia.getObservaciones());
+      licenciaOriginal.setLimitaciones(licencia.getLimitaciones());
+      licenciaOriginal.setFechaFinVigencia(nuevaVigencia);
+      licenciaOriginal.setFechaInicioVigencia(today.getTime());
+    } else if (expirada) {
+      nuevaVigencia =
+          vigenciaService.getVigenciaExpirada(licenciaOriginal.getTitular().getFechaNacimiento(),
+              licenciaOriginal.getFechaFinVigencia());
+      licenciaRepository.licenciaExpirada(licenciaOriginal.getId(), today.getTime(), nuevaVigencia);
+      licenciaOriginal.setFechaFinVigencia(nuevaVigencia);
+      licenciaOriginal.setFechaInicioVigencia(today.getTime());
+    } else if (modificada) {
+      licenciaRepository.licenciaModificada(licenciaOriginal.getId(), licencia.getObservaciones(),
+          licencia.getLimitaciones());
+      licenciaOriginal.setObservaciones(licencia.getObservaciones());
+      licenciaOriginal.setLimitaciones(licencia.getLimitaciones());
+    }
+
+    return licenciaOriginal;
+
   }
 }
