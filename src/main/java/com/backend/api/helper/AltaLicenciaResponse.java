@@ -15,7 +15,7 @@ public class AltaLicenciaResponse {
   private Integer costo;
   private String licenciaFrente;
   private String licenciaAtras;
-
+  private String ticket;
 
   public AltaLicenciaResponse(Licencia altaLicencia, String licenciaFrente, String licenciaAtras) {
     id = altaLicencia.getId();
@@ -27,6 +27,14 @@ public class AltaLicenciaResponse {
     numeroCopia = altaLicencia.getNumeroCopia();
     this.licenciaFrente = licenciaFrente;
     this.licenciaAtras = licenciaAtras;
+  }
+
+  public String getTicket() {
+    return ticket;
+  }
+
+  public void setTicket(String ticket) {
+    this.ticket = ticket;
   }
 
   public String getLicenciaFrente() {

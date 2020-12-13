@@ -67,4 +67,31 @@ public class Position {
 
   public static final Integer LIMITACIONES_X2 = 475;
   public static final Integer LIMITACIONES_Y2 = 136;
+
+
+  /////// TICKET//////
+
+  public static final Integer ITEM1_X = 180;
+  public static final Integer ITEM1_Y = 625;
+  public static final Integer CANT1_X = 65;
+  public static final Integer CANT1_Y = 625;
+  public static final Integer MONTO1_X = 820;
+  public static final Integer MONTO1_Y = 625;
+
+  public static final Integer ITEM2_X = 180;
+  public static final Integer ITEM2_Y = 725;
+  public static final Integer CANT2_X = 65;
+  public static final Integer CANT2_Y = 725;
+  public static final Integer MONTO2_X = 820;
+  public static final Integer MONTO2_Y = 725;
+
+  public static final Integer ITEM3_X = 180;
+  public static final Integer ITEM3_Y = 825;
+  public static final Integer CANT3_X = 65;
+  public static final Integer CANT3_Y = 825;
+  public static final Integer MONTO3_X = 820;
+  public static final Integer MONTO3_Y = 825;
+
+  public static final Integer TOTAL_X = 820;
+  public static final Integer TOTAL_Y = 1195;
 }

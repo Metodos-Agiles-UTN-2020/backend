@@ -1,5 +1,6 @@
 package com.backend.api.config;
 
+import javax.persistence.EntityNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     return new ResponseEntity<Object>(
         "El titular no cumple los requisitos para obtener una licencia profesional",
         new HttpHeaders(), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler({EntityNotFoundException.class})
+  public ResponseEntity<Object> handleEntityNotFoundException(Exception ex, WebRequest request) {
+    return new ResponseEntity<Object>("El elemento solicitado no existe", new HttpHeaders(),
+        HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler({NotFoundException.class})
