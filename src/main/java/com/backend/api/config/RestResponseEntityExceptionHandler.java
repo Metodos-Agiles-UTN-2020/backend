@@ -20,7 +20,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
   @ExceptionHandler({AgeOutOfBoundsException.class})
   public ResponseEntity<Object> handleAgeOutOfBoundsException(Exception ex, WebRequest request) {
     return new ResponseEntity<Object>(
-        "El titular no cumple con los requisitos de edad para la licencia solicitada",
+        "El titular no cumple con los requisitos de edad para la accion solicitada",
         new HttpHeaders(), HttpStatus.BAD_REQUEST);
   }
 
