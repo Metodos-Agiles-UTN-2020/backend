@@ -47,6 +47,7 @@ public class ApplicationUserController {
 
   @GetMapping("/user/{nroDocumento}")
   ApplicationUser getUserByDni(@PathVariable(value = "nroDocumento") String nroDocumento) {
+
     ApplicationUser user = applicationUserDetailsService.getUserByDNI(nroDocumento);
     return user;
   }

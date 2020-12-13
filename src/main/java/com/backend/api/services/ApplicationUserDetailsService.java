@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import com.backend.api.exceptions.NotFoundException;
 import com.backend.api.models.ApplicationUser;
 import com.backend.api.repositories.ApplicationUserRepository;
 
@@ -36,7 +37,14 @@ public class ApplicationUserDetailsService implements UserDetailsService {
   }
 
   public ApplicationUser getUserByDNI(String nroDocumento) {
-    return applicationUserRepository.findByDni(nroDocumento);
+
+    ApplicationUser user = applicationUserRepository.findByDni(nroDocumento);
+
+    if (user == null) {
+      throw new NotFoundException();
+    }
+
+    return user;
   }
 
   public void updateUser(ApplicationUser updateUser) {
