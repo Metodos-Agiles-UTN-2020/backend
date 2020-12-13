@@ -10,6 +10,7 @@ public class CostoLicencia {
   @Id
   private CodigoLicencia tipo;
   private Integer costoAdministrativo;
+  private Integer costoCopia;
   private Integer year5;
   private Integer year4;
   private Integer year3;
@@ -61,6 +62,14 @@ public class CostoLicencia {
 
   public void setYear1(Integer year1) {
     this.year1 = year1;
+  }
+
+  public Integer getCostoCopia() {
+    return costoCopia;
+  }
+
+  public void setCostoCopia(Integer costoCopia) {
+    this.costoCopia = costoCopia;
   }
 
 }

@@ -3,7 +3,7 @@ package com.backend.api.models;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
-import com.backend.api.config.IdVigencia;
+import com.backend.api.helper.IdVigencia;
 
 @Entity
 @IdClass(IdVigencia.class)

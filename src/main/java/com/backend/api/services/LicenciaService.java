@@ -37,6 +37,11 @@ public class LicenciaService {
   @Autowired
   private VigenciaService vigenciaService;
 
+
+  public Licencia getById(Long id) {
+    return licenciaRepository.getOne(id);
+  }
+
   public Licencia altaLicencia(Long idTitular, CodigoLicencia codigoLicencia, String limitaciones,
       String observaciones) throws Exception {
     TitularLicencia titular = titularLicenciaService.getTitularById(idTitular);
@@ -105,5 +110,9 @@ public class LicenciaService {
       Pageable paginacion) {
     return licenciaRepository.findByEstadoAndFechaFinVigenciaLessThanOrderByFechaFinVigenciaDesc(
         estadoLicencia, today, paginacion);
+  }
+
+  public void getCopia(Long id, Integer nroCopia) {
+    licenciaRepository.copiaLicencia(id, nroCopia);
   }
 }
