@@ -13,8 +13,11 @@ public class AltaLicenciaResponse {
   private EstadoLicencia estado;
   private Integer numeroCopia;
   private Integer costo;
+  private String licenciaFrente;
+  private String licenciaAtras;
 
-  public AltaLicenciaResponse(Licencia altaLicencia) {
+
+  public AltaLicenciaResponse(Licencia altaLicencia, String licenciaFrente, String licenciaAtras) {
     id = altaLicencia.getId();
     observaciones = altaLicencia.getObservaciones();
     limitaciones = altaLicencia.getLimitaciones();
@@ -22,6 +25,24 @@ public class AltaLicenciaResponse {
     fechaInicioVigencia = altaLicencia.getFechaInicioVigencia();
     estado = altaLicencia.getEstado();
     numeroCopia = altaLicencia.getNumeroCopia();
+    this.licenciaFrente = licenciaFrente;
+    this.licenciaAtras = licenciaAtras;
+  }
+
+  public String getLicenciaFrente() {
+    return licenciaFrente;
+  }
+
+  public void setLicenciaFrente(String licenciaFrente) {
+    this.licenciaFrente = licenciaFrente;
+  }
+
+  public String getLicenciaAtras() {
+    return licenciaAtras;
+  }
+
+  public void setLicenciaAtras(String licenciaAtras) {
+    this.licenciaAtras = licenciaAtras;
   }
 
   public long getId() {

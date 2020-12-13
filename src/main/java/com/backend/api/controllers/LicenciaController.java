@@ -1,5 +1,7 @@
 package com.backend.api.controllers;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import javax.validation.Valid;
@@ -21,6 +23,7 @@ import com.backend.api.constants.GrupoSanguineo;
 import com.backend.api.helper.AltaLicenciaRequest;
 import com.backend.api.helper.AltaLicenciaResponse;
 import com.backend.api.helper.LicenciaResponse;
+import com.backend.api.helper.LicenseEncoder;
 import com.backend.api.helper.PageResponse;
 import com.backend.api.models.Licencia;
 import com.backend.api.services.CostoLicenciaService;
@@ -45,7 +48,29 @@ public class LicenciaController {
 
     Licencia licencia = licenciaService.altaLicencia(altaLicencia.idTitular,
         altaLicencia.codigoLicencia, altaLicencia.limitaciones, altaLicencia.observaciones);
-    AltaLicenciaResponse respuesta = new AltaLicenciaResponse(licencia);
+
+
+    DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+    String fechafinVigencia = formatter.format(licencia.getFechaFinVigencia());
+    String fechaInicioVigencia = formatter.format(licencia.getFechaInicioVigencia());
+    String fechaNacimiento = formatter.format(licencia.getTitular().getFechaNacimiento());
+
+    String licenciaFrente = LicenseEncoder.encodeFront(licencia.getTitular().getNroDocumento(),
+        licencia.getTitular().getApellido(), licencia.getTitular().getNombre(),
+        licencia.getTitular().getDomicilio(), fechaNacimiento, fechaInicioVigencia,
+        licencia.getTipoLicencia().getCodigo().toString(), fechafinVigencia,
+        licencia.getTitular().getFoto());
+
+
+    String donante = licencia.getTitular().getDonante() ? "SI" : "NO";
+    String factor = licencia.getTitular().getFactorRh().toString() == "POSITIVO" ? "+" : "-";
+
+    String licenciaAtras = LicenseEncoder.encodeBack(licencia.getObservaciones(), donante,
+        licencia.getTitular().getGrupoSanguineo().toString() + factor, licencia.getLimitaciones());
+
+
+    AltaLicenciaResponse respuesta =
+        new AltaLicenciaResponse(licencia, licenciaFrente, licenciaAtras);
 
 
     Calendar auxFinVigencia = Calendar.getInstance();
