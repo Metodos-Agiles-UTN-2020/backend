@@ -19,7 +19,6 @@ public class AltaLicenciaResponseBuilder {
         licencia.getTipoLicencia().getCodigo().toString(), fechafinVigencia,
         licencia.getTitular().getFoto());
 
-
     String donante = licencia.getTitular().getDonante() ? "SI" : "NO";
     String factor = licencia.getTitular().getFactorRh().toString() == "POSITIVO" ? "+" : "-";
 

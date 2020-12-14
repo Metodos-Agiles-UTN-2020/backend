@@ -68,6 +68,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
   @ExceptionHandler({Exception.class})
   public ResponseEntity<Object> handleInternalError(Exception ex, WebRequest request) {
+    ex.printStackTrace();
     return new ResponseEntity<Object>(
         "Error interno del sistema, este error no es producto de una accion realizada por usted. Nuestros tecnicos estan trabajando para solucionarlo.",
         new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);

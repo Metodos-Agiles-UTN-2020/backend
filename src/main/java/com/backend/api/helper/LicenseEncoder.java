@@ -10,16 +10,23 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Base64;
 import javax.imageio.ImageIO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import com.backend.api.constants.Position;
 
 
 
 public class LicenseEncoder {
-  static final String BACK = "./src/main/resources/assets/back.jpg";
-  static final String FRONT = "./src/main/resources/assets/front.png";
-  static final String OUTPUT_BACK = "./src/main/resources/assets/back_out.jpg";
-  static final String OUTPUT_FRONT = "./src/main/resources/assets/front_out.png";
-  static final String PROFILE = "./src/main/resources/assets/profile.png";
+
+  private static final Logger logger = LogManager.getLogger(LicenseEncoder.class);
+
+  static final String BASE_PATH = "/fotos/";
+
+  static final String BACK = BASE_PATH + "back.jpg";
+  static final String FRONT = BASE_PATH + "front.png";
+  static final String OUTPUT_BACK = BASE_PATH + "back_out.png";
+  static final String OUTPUT_FRONT = BASE_PATH + "front_out.png";
+  static final String PROFILE = BASE_PATH + "profile.png";
   static final String FONT = "Arial";
   static final Integer FONT_SIZE = 30;
 
@@ -35,21 +42,21 @@ public class LicenseEncoder {
       vencimiento = vencimiento.toUpperCase();
 
       BufferedImage back = ImageIO.read(new File(FRONT));
+      logger.debug(back);
       Graphics licence = back.getGraphics();
+      logger.debug(licence);
+
 
       licence.setFont(new Font(FONT, Font.BOLD, 50));
       licence.setColor(Color.BLACK);
 
-      BufferedImage image = null;
       byte[] imageByte;
-      try {
-        imageByte = Base64.getDecoder().decode(foto);
-        ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
-        image = ImageIO.read(bis);
-        ImageIO.write(image, "png", new File(PROFILE));
-        bis.close();
-      } catch (Exception e) {
-      }
+      imageByte = Base64.getDecoder().decode(foto);
+      ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+      BufferedImage image = ImageIO.read(bis);
+      ImageIO.write(image, "png", new File(PROFILE));
+      bis.close();
+
       BufferedImage prof = ImageIO.read(new File(PROFILE));
 
       // DNI
@@ -79,12 +86,14 @@ public class LicenseEncoder {
         byte imageData[] = new byte[(int) file.length()];
         imageInFile.read(imageData);
         base64Image = Base64.getEncoder().encodeToString(imageData);
-        return base64Image;
+        return "data:image/png;base64," + base64Image;
 
       } catch (Exception e) {
+        logger.debug(e);
       }
 
     } catch (IOException e) {
+      logger.debug(e);
     }
     return null;
   }
@@ -95,7 +104,9 @@ public class LicenseEncoder {
     try {
       Integer FONT_SIZE = 22;
       BufferedImage back = ImageIO.read(new File(BACK));
+      logger.debug(back);
       Graphics licence = back.getGraphics();
+      logger.debug(licence);
       licence.setFont(new Font(FONT, Font.BOLD, FONT_SIZE));
       licence.setColor(Color.BLACK);
 
@@ -131,11 +142,14 @@ public class LicenseEncoder {
         byte imageData[] = new byte[(int) file.length()];
         imageInFile.read(imageData);
         base64Image = Base64.getEncoder().encodeToString(imageData);
-        return base64Image;
+        return "data:image/png;base64," + base64Image;
       } catch (Exception e) {
+        logger.debug(e);
+
       }
 
     } catch (IOException e) {
+      logger.debug(e);
     }
     return null;
   }
