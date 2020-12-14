@@ -19,13 +19,11 @@ public class AltaLicenciaResponseBuilder {
         licencia.getTipoLicencia().getCodigo().toString(), fechafinVigencia,
         licencia.getTitular().getFoto());
 
-
     String donante = licencia.getTitular().getDonante() ? "SI" : "NO";
     String factor = licencia.getTitular().getFactorRh().toString() == "POSITIVO" ? "+" : "-";
 
     String licenciaAtras = LicenseEncoder.encodeBack(licencia.getObservaciones(), donante,
         licencia.getTitular().getGrupoSanguineo().toString() + factor, licencia.getLimitaciones());
-
 
     AltaLicenciaResponse respuesta =
         new AltaLicenciaResponse(licencia, licenciaFrente, licenciaAtras);
