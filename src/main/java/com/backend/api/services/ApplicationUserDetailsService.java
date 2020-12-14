@@ -55,4 +55,8 @@ public class ApplicationUserDetailsService implements UserDetailsService {
 
   }
 
+  public ApplicationUser saveUser(ApplicationUser newUser) {
+    return applicationUserRepository.save(newUser);
+  }
+
 }

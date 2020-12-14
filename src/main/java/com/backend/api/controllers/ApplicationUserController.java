@@ -1,25 +1,23 @@
 package com.backend.api.controllers;
 
 
-import static com.backend.api.constants.SecurityConstants.AUTH_HEADER_NAME;
-import static com.backend.api.constants.SecurityConstants.KEY;
 import java.security.Principal;
-import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import com.backend.api.config.SecurityConfiguration;
 import com.backend.api.constants.TipoUsuario;
 import com.backend.api.exceptions.ForbiddenException;
 import com.backend.api.models.ApplicationUser;
 import com.backend.api.services.ApplicationUserDetailsService;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 
 
 @Component
@@ -35,6 +33,8 @@ public class ApplicationUserController {
   @Autowired
   private ApplicationUserDetailsService applicationUserDetailsService;
 
+  @Autowired
+  private SecurityConfiguration securityConfiguration;
 
   @GetMapping("/user")
   ApplicationUser getUserDetails(Principal principal) {
@@ -53,13 +53,10 @@ public class ApplicationUserController {
   }
 
   @PutMapping("/user")
-  ApplicationUser updateUser(@RequestBody ApplicationUser updateUser, HttpServletRequest request)
+  ApplicationUser updateUser(@RequestBody ApplicationUser updateUser, Principal principal)
       throws Exception {
-    String token = request.getHeader(AUTH_HEADER_NAME);
 
-    @SuppressWarnings("deprecation")
-    String username = Jwts.parser().setSigningKey(Keys.hmacShaKeyFor(KEY.getBytes()))
-        .parseClaimsJws(token).getBody().get("sub").toString();
+    String username = principal.getName();
 
     ApplicationUser user = applicationUserDetailsService.getUserDetails(username);
 
@@ -72,4 +69,26 @@ public class ApplicationUserController {
     return updateUser;
   }
 
+  @PostMapping("/user")
+  ApplicationUser saveUser(@Valid @RequestBody ApplicationUser newUser, Principal principal)
+      throws Exception {
+
+    String username = principal.getName();
+
+    ApplicationUser user = applicationUserDetailsService.getUserDetails(username);
+
+    if (user.getTipoUsuario() != TipoUsuario.SUPERUSUARIO) {
+      throw new ForbiddenException();
+    }
+
+    String encodedPassword =
+        securityConfiguration.passwordEncoder().encode(newUser.getPassword().toString());
+
+    newUser.setPassword(encodedPassword);
+
+    newUser = applicationUserDetailsService.saveUser(newUser);
+
+    return newUser;
+
+  }
 }
