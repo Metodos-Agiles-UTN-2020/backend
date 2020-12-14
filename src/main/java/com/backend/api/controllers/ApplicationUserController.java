@@ -81,6 +81,10 @@ public class ApplicationUserController {
       throw new ForbiddenException();
     }
 
+    if (newUser.getTipoUsuario() == TipoUsuario.SUPERUSUARIO) {
+      throw new ForbiddenException();
+    }
+
     String encodedPassword =
         securityConfiguration.passwordEncoder().encode(newUser.getPassword().toString());
 
