@@ -1,6 +1,7 @@
 package com.backend.api.config;
 
 import javax.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     return new ResponseEntity<Object>(
         "El titular no cumple los requisitos para obtener una licencia profesional",
         new HttpHeaders(), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler({DataIntegrityViolationException.class})
+  public ResponseEntity<Object> handleDataIntegrityViolationException(Exception ex,
+      WebRequest request) {
+    return new ResponseEntity<Object>("Campo unico repetido", new HttpHeaders(),
+        HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler({EntityNotFoundException.class})

@@ -74,7 +74,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
   protected void unsuccessfulAuthentication(HttpServletRequest request,
       HttpServletResponse response, AuthenticationException failed)
       throws IOException, ServletException {
-    logger.info("Athentication request failed");
+    logger.info("Authentication request failed");
     super.unsuccessfulAuthentication(request, response, failed);
   }
 }
