@@ -9,17 +9,25 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Base64;
 import javax.imageio.ImageIO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import com.backend.api.constants.Position;
 
 
 public class TicketEncoder {
-  static final String CANVAS = "./src/main/resources/assets/ticket_canvas.jpg";
-  static final String OUTPUT_TICKET = "./src/main/resources/assets/ticket_out.jpg";
+  private static final Logger logger = LogManager.getLogger(TicketEncoder.class);
+
+  static final String BASE_PATH = "/fotos/";
+  static final String CANVAS = BASE_PATH + "ticket_canvas.jpg";
+  static final String OUTPUT_TICKET = BASE_PATH + "ticket_out.jpg";
   static final String FONT = "Tahoma";
   static final Integer FONT_SIZE = 40;
 
   public static String encode(String item1, String monto1, String cant1, String item2,
       String monto2, String cant2, String item3, String monto3, String cant3, String total) {
+    logger.debug(CANVAS);
+    logger.debug(OUTPUT_TICKET);
+
     try {
       BufferedImage back = ImageIO.read(new File(CANVAS));
       Graphics g = back.getGraphics();
@@ -52,7 +60,7 @@ public class TicketEncoder {
         byte imageData[] = new byte[(int) file.length()];
         imageInFile.read(imageData);
         base64Image = Base64.getEncoder().encodeToString(imageData);
-        return base64Image;
+        return "data:image/png;base64," + base64Image;
 
       } catch (Exception e) {
       }

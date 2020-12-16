@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.backend.api.constants.TipoDocumento;
@@ -39,9 +38,10 @@ public class TitularLicenciaController {
         tipoDocumento);
   }
 
-  @PutMapping("/titular")
+  @PostMapping("/updatetitular")
   TitularLicencia updateTitular(@Valid @RequestBody TitularLicencia titular) {
     titularLicenciaService.updateTitular(titular);
+    titular.setFoto("data:image/png;base64," + titular.getFoto());
     return titular;
   }
 }

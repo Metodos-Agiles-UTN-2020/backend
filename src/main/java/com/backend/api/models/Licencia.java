@@ -21,6 +21,7 @@ public class Licencia {
   private Date fechaInicioVigencia;
   private EstadoLicencia estado;
   private Integer numeroCopia;
+  private Boolean renovable;
 
   @OneToOne
   @JsonIgnore
@@ -101,4 +102,14 @@ public class Licencia {
   public void setTipoLicencia(TipoLicencia tipoLicencia) {
     this.tipoLicencia = tipoLicencia;
   }
+
+  public Boolean getRenovable() {
+    return renovable;
+  }
+
+  public void setRenovable(Boolean renovable) {
+    this.renovable = renovable;
+  }
+
+
 }

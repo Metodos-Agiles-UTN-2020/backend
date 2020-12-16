@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.backend.api.config.SecurityConfiguration;
@@ -52,7 +51,7 @@ public class ApplicationUserController {
     return user;
   }
 
-  @PutMapping("/user")
+  @PostMapping("/updateuser")
   ApplicationUser updateUser(@RequestBody ApplicationUser updateUser, Principal principal)
       throws Exception {
 

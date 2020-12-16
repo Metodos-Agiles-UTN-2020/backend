@@ -16,6 +16,7 @@ public class AltaLicenciaResponse {
   private String licenciaFrente;
   private String licenciaAtras;
   private String ticket;
+  private Boolean renovable;
 
   public AltaLicenciaResponse(Licencia altaLicencia, String licenciaFrente, String licenciaAtras) {
     id = altaLicencia.getId();
@@ -25,8 +26,10 @@ public class AltaLicenciaResponse {
     fechaInicioVigencia = altaLicencia.getFechaInicioVigencia();
     estado = altaLicencia.getEstado();
     numeroCopia = altaLicencia.getNumeroCopia();
+    renovable = altaLicencia.getRenovable();
     this.licenciaFrente = licenciaFrente;
     this.licenciaAtras = licenciaAtras;
+
   }
 
   public String getTicket() {
@@ -115,5 +118,13 @@ public class AltaLicenciaResponse {
 
   public void setCosto(Integer costo) {
     this.costo = costo;
+  }
+
+  public Boolean getRenovable() {
+    return renovable;
+  }
+
+  public void setRenovable(Boolean renovable) {
+    this.renovable = renovable;
   }
 }

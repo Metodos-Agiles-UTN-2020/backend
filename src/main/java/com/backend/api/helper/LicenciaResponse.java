@@ -2,6 +2,7 @@ package com.backend.api.helper;
 
 import java.util.Date;
 import com.backend.api.constants.CodigoLicencia;
+import com.backend.api.constants.EstadoLicencia;
 import com.backend.api.constants.FactorRh;
 import com.backend.api.constants.GrupoSanguineo;
 import com.backend.api.constants.TipoDocumento;
@@ -18,6 +19,8 @@ public class LicenciaResponse {
   private FactorRh factorRH;
   private GrupoSanguineo grupoSanguineo;
   private Boolean donante;
+  private Boolean renovable;
+  private EstadoLicencia estado;
 
   public LicenciaResponse(Licencia licencia) {
     this.id = licencia.getId();
@@ -30,6 +33,8 @@ public class LicenciaResponse {
     this.factorRH = licencia.getTitular().getFactorRh();
     this.grupoSanguineo = licencia.getTitular().getGrupoSanguineo();
     this.donante = licencia.getTitular().getDonante();
+    this.renovable = licencia.getRenovable();
+    this.estado = licencia.getEstado();
   }
 
 
@@ -113,5 +118,20 @@ public class LicenciaResponse {
     this.donante = donante;
   }
 
+  public Boolean getRenovable() {
+    return renovable;
+  }
+
+  public void setRenovable(Boolean renovable) {
+    this.renovable = renovable;
+  }
+
+  public EstadoLicencia getEstado() {
+    return estado;
+  }
+
+  public void setEstado(EstadoLicencia estado) {
+    this.estado = estado;
+  }
 
 }

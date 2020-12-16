@@ -84,6 +84,7 @@ public class LicenciaService {
     licencia.setObservaciones(observaciones);
     licencia.setTipoLicencia(tipoLicencia);
     licencia.setTitular(titular);
+    licencia.setRenovable(false);
 
 
     List<Licencia> licenciasAnteriores = licenciaRepository

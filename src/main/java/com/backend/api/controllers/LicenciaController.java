@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -148,7 +147,7 @@ public class LicenciaController {
     return respuesta;
   }
 
-  @PutMapping("/licencia")
+  @PostMapping("/updatelicencia")
   AltaLicenciaResponse renovarLicencia(
       @RequestParam(name = "modificada", required = false) Boolean modificada,
       @RequestParam(name = "expirada", required = false) Boolean expirada,
@@ -165,6 +164,28 @@ public class LicenciaController {
     }
 
     licencia = licenciaService.modificarLicencia(modificada, expirada, licencia);
+
+    AltaLicenciaResponse respuesta = AltaLicenciaResponseBuilder.build(licencia);
+
+    Calendar auxFinVigencia = Calendar.getInstance();
+    auxFinVigencia.setTime(licencia.getFechaFinVigencia());
+
+    Calendar auxInicioVigencia = Calendar.getInstance();
+    auxInicioVigencia.setTime(licencia.getFechaInicioVigencia());
+
+    respuesta.setCosto(costoLicenciaService.getCosto(licencia.getTipoLicencia().getCodigo(),
+        auxFinVigencia.get(Calendar.YEAR) - auxInicioVigencia.get(Calendar.YEAR)));
+
+    respuesta.setTicket(
+        TicketEncoder.encode("Licencia tipo " + licencia.getTipoLicencia().getCodigo().toString(),
+            "$" + respuesta.getCosto(), "1", "", "", "", "", "", "", "$" + respuesta.getCosto()));
+
+    return respuesta;
+  }
+
+  @GetMapping("/licencia/{idLicencia}")
+  AltaLicenciaResponse renovarLicencia(@PathVariable(value = "id") Long idLicencia) {
+    Licencia licencia = licenciaService.getById(idLicencia);
 
     AltaLicenciaResponse respuesta = AltaLicenciaResponseBuilder.build(licencia);
 

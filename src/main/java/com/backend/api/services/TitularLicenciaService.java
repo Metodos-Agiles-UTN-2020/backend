@@ -46,6 +46,7 @@ public class TitularLicenciaService {
       throw new NotFoundException();
     }
 
+    titular.setFoto("data:image/png;base64," + titular.getFoto());
     return titular;
   }
 
@@ -54,10 +55,12 @@ public class TitularLicenciaService {
   }
 
   public void updateTitular(TitularLicencia titular) {
+
+    String foto = titular.getFoto().split(Pattern.quote(","))[1];
     titularLicenciaRepository.updateTitular(titular.getTipoDocumento().ordinal(),
         titular.getNroDocumento(), titular.getNombre(), titular.getApellido(),
         titular.getFechaNacimiento(), titular.getDomicilio(), titular.getGrupoSanguineo().ordinal(),
-        titular.getFactorRh().ordinal(), titular.getDonante(), titular.getFoto(), titular.getId());
+        titular.getFactorRh().ordinal(), titular.getDonante(), foto, titular.getId());
   }
 
 }
